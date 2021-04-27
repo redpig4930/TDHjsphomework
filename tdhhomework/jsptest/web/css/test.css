@@ -1,0 +1,82 @@
+.test1{
+	width: 100%;
+	height: 100%;
+	table-layout: fixed;
+	border-collapse: collapse;
+	border: 2px solid black;
+	background-color: #f7f7f7;
+}
+
+textarea{
+	width:99%;
+	height:90%;
+	overflow: auto;
+}
+
+.test_title{
+	text-align: center;
+	font-size: 24px;
+	padding-bottom: 10px;
+}
+
+.test_bottom{
+	text-align: center;
+	padding-top: 10px;
+}
+
+.test_input{
+	width: 95%;
+}
+
+.test_head{
+	padding-left: 20px;
+}
+
+.test_layout{
+	border: 2px solid black;
+	background-color: #ffffff;
+}
+
+.user_table{
+	width: 99%;
+	border: 2px solid #02a9f0;
+	border-collapse: collapse;
+	margin-top: 5px;
+	margin-left: 5px;
+	margin-right: 5px;
+}
+
+.table_head{
+	background-color: #fffc9b;
+	padding: 5px 5px;
+}
+
+.btn{
+	background-color: #8fcb53;
+	height: 25px;
+	width: auto;
+	font-family: 微软雅黑;
+	cursor: pointer;
+	padding: 0px 10px;
+	margin-left: 5px;
+	margin-right: 5px;
+}
+
+.head{
+	background-color: #e8fff0;
+}
+
+.test_side{
+	height: 600px;
+	padding-left: 10px;
+}
+label{
+	color: red;
+}
+.pointer{
+	cursor: pointer;
+	font-size: 15px;
+	font-weight:bold;
+	color: #466c1b;
+}
+
