@@ -7,19 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-/**
- * @Author huzhenyu
- * @Description 增删查改类
- * @Project Name:test
- * @File_Name: CRUDtuser
- * @Package_Name:  tdh.homework
- * Modification History:
- * @Date @TIME      @Author      @Version  Description
- * ------------------------------------------------------------------
- * 2021/04/17 14:40  huzhenyu     1.0        1.0 Version
- * 2021/04/20 15:18  huzhenyu     1.01       一、更改类名、变量名，使其符合命名规范;
- *                                           二、修改create方法，不直接使用数字下标来指代通配符;
- */
+
 public class CrudTuser {
     /**
      * 性别代码-性别名称map
