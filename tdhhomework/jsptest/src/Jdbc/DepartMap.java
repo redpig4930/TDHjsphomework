@@ -4,18 +4,7 @@ import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * @Author huzhenyu
- * @Description 部门代码转换类
- * @Project Name:test
- * @File_Name: Departmap
- * @Package_Name:  tdh.homework
- * Modification History:
- *  * @Date @TIME      @Author      @Version  Description
- *  * ------------------------------------------------------------------
- *  * 2021/04/16 19:23  huzhenyu     1.0        1.0 Version
- *  * 2021/04/20 15:22  huzhenyu     1.01       更改了类名、变量名，使其符合命名规范
- */
+
 public class DepartMap {
     /**
      *部门代码-部门名称map
