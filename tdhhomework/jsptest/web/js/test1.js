@@ -71,11 +71,11 @@ jQuery(function(){
 		var pwd2=jQuery('[name="pwd2"]').val();
 		var gender=jQuery('[name="gender"]:checked').val();
 		var birth=jQuery('#datetimepicker').val().replace(/-/g,'');
-		var pxh=jQuery('[name="number"]:checked').val();
+		var pxh=jQuery('[name="number"]').val();
 		var depart=jQuery("#depart option:selected").val();
-		var ban=jQuery('[name="isBan"]:checked').val();
+		ban=jQuery('[name="isBan"]:checked').val();
 		var msg=[];
-		var params='';
+		var rep = /^(\w*)admin(\w*)$/i
 		if(check(username)){
 			msg.push('用户姓名');
 		}
@@ -93,8 +93,9 @@ jQuery(function(){
 		}
 		else if(!(pwd==pwd2)){
 			alert('两次口令不一致');
-		}
-		else{
+		}else if(rep.test(userid)){
+			alert("用户id不能包含admin");
+		} else{
 			$.ajax({
 				type:'post',
 				url:'CreateUser',
@@ -141,15 +142,17 @@ function addResult(data){
 	var user;
 	for(var i=0;i<data.length;i++){
 		user=data[i];
+		var pxh = (user.PXH===null?'无':user.PXH);
+		var gender = (user.YHXB===null?'无':user.YHXB);
 		jQuery("#data").append("<tr>\n" +
-			"                    <td align=\"center\">"+user.PXH+"</td>\n" +
+			"                    <td align=\"center\">"+pxh+"</td>\n" +
 			"                    <td align=\"center\" class='pointer' id='"+user.YHID+"'>查看</td>\n" +
 			"                    <td align=\"center\" class='pointer' id='"+user.YHID+"'>删除</td>\n" +
 			"                    <td align=\"center\" class='pointer' id='"+user.YHID+"'>修改</td>\n" +
 			"                    <td align=\"center\">"+user.YHXM+"</td>\n" +
 			"                    <td align=\"center\">"+user.YHID+"</td>\n" +
 			"                    <td align=\"center\">"+user.YHBM+"</td>\n" +
-			"                    <td align=\"center\">"+user.YHXB+"</td>\n" +
+			"                    <td align=\"center\">"+gender+"</td>\n" +
 			"                    <td></td>\n" +
 			"                </tr>");
 	}

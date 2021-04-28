@@ -39,11 +39,11 @@ public class CrudTuser {
             //建立连接
             conn = JdbcUtils.getConnection();
             //创建语句
-            pst = conn.prepareStatement("delete from T_USER where YHDM=?");
+            pst = conn.prepareStatement("delete from T_USER where YHID=?");
             pst.setString(1, userId);
             //执行语句
-            int i = pst.executeUpdate();
-            if(i==1) System.out.println("删除记录YHDM="+userId);
+            pst.executeUpdate();
+            //if(i==1) System.out.println("删除记录YHDM="+userId);
         } finally {
             JdbcUtils.close(rs,pst,conn);
         }
@@ -62,20 +62,47 @@ public class CrudTuser {
      * @param DJSJ 登记时间
      * @throws Exception 一异常信息
      */
-    public static int create(String YHDM, String DWDM, String YHID, String YHXM, String YHKL, String YHXB, String YHBM, String CSRQ, String DJSJ)throws Exception{
+    public static int create(String YHDM, String DWDM, String YHID, String YHXM, String YHKL, String YHXB, String YHBM, String CSRQ, String DJSJ,String SFJY,String PXH)throws Exception{
         Connection conn = null;
         PreparedStatement pst = null;
         ResultSet rs = null;
         //values数组保存要插入的字段，且顺序与表相同
-        String[] values = {YHDM, DWDM, YHID, YHXM, YHKL, YHXB, YHBM, CSRQ, DJSJ};
+        String[] values = {YHDM, DWDM, YHID, YHXM, YHKL, YHXB, YHBM, CSRQ, DJSJ,SFJY,PXH};
+        byte yes=new Byte("1");
+        byte no=new Byte("0");
         try {
             //建立连接
             conn = JdbcUtils.getConnection();
             //创建语句
-            pst = conn.prepareStatement("insert into T_USER (YHDM, DWDM, YHID, YHXM, YHKL, YHXB, YHBM, CSRQ, DJSJ) " +
-                    "values (?,?,?,?,?,?,?,?,?)");
+            pst = conn.prepareStatement("insert into T_USER (YHDM, DWDM, YHID, YHXM, YHKL, YHXB, YHBM, CSRQ, DJSJ,SFJY,PXH) " +
+                    "values (?,?,?,?,?,?,?,?,?,?,?)");
             for(int i=1;i<= values.length;i++){
-                pst.setString(i,values[i-1]);
+                //特殊判断是否禁用
+                if(i==10){
+                    if(SFJY==null){
+                        pst.setByte(i, no);
+                    }else{
+                        pst.setByte(i, yes);
+                    }
+                    //特殊判断排序号
+                }else if(i==11){
+                    if(PXH.isEmpty()){
+                        pst.setObject(i,null);
+                    }else {
+                        pst.setInt(i,Integer.parseInt(PXH));
+                    }
+                    //特殊判断出生日期
+                }else if(i==8){
+                    if(CSRQ.isEmpty()){
+                        pst.setString(i,null);
+                    }else{
+                        pst.setString(i,CSRQ);
+                    }
+                }else {
+                    pst.setString(i,values[i-1]);
+                }
+
+
             }
             //执行语句
             pst.executeUpdate();
@@ -96,20 +123,47 @@ public class CrudTuser {
      * @param updateValue 更新值
      * @throws Exception 异常信息
      */
-    public static void updateName(String userId,String updateValue)throws Exception{
+    public static void update( String YHID, String YHXM, String YHKL, String YHXB, String YHBM, String CSRQ,String PXH,String SFJY)throws Exception{
         Connection conn = null;
         PreparedStatement pst = null;
         ResultSet rs = null;
+        byte yes=new Byte("1");
+        byte no=new Byte("0");
+        String[] values={YHXM,YHKL,YHXB,YHBM,CSRQ,PXH,SFJY,YHID};
         try {
             //建立连接
             conn = JdbcUtils.getConnection();
             //创建语句
-            pst = conn.prepareStatement("update T_USER set YHXM = ? where YHDM = ?");
-            pst.setString(1,updateValue);
-            pst.setString(2,userId);
+            pst = conn.prepareStatement("update T_USER set YHXM=?,YHKL=?,YHXB=?,YHBM=?,CSRQ=?,PXH=?,SFJY=? where YHID = ?");
+            for(int i=1;i<=values.length;i++){
+                //特殊判断是否禁用
+                if(i==7){
+                    if(SFJY==null){
+                        pst.setByte(i, no);
+                    }else{
+                        pst.setByte(i, yes);
+                    }
+                    //特殊判断排序号
+                }else if(i==6){
+                    if(PXH.isEmpty()){
+                        pst.setObject(i,null);
+                    }else {
+                        pst.setInt(i,Integer.parseInt(PXH));
+                    }
+                    //特殊判断出生日期
+                }else if(i==5){
+                    if(CSRQ.isEmpty()){
+                        pst.setString(i,null);
+                    }else{
+                        pst.setString(i,CSRQ);
+                    }
+                }else{
+                    pst.setString(i,values[i-1]);
+                }
+
+            }
             //执行语句
-            int i = pst.executeUpdate();
-            if(i==1) System.out.println("更新姓名为"+updateValue);
+            pst.executeUpdate();
         } finally {
             JdbcUtils.close(rs,pst,conn);
         }
@@ -130,7 +184,7 @@ public class CrudTuser {
             //建立连接
             conn = JdbcUtils.getConnection();
             //创建语句
-            pst = conn.prepareStatement("select YHID, YHXM, YHKL, YHXB, YHBM, CSRQ, PXH from T_USER where YHID =? or YHXM=?");
+            pst = conn.prepareStatement("select YHID, YHXM, YHKL, YHXB, YHBM, CSRQ, PXH,SFJY from T_USER where YHID =? or YHXM=?");
             pst.setString(1,userId);
             pst.setString(2,userId);
             //执行语句
@@ -145,6 +199,7 @@ public class CrudTuser {
                 map.put("YHBM", DepartMap.departMap(rs.getString("YHBM")));
                 map.put("CSRQ",rs.getString("CSRQ"));
                 map.put("PXH",rs.getString("PXH"));
+                map.put("SFJY",rs.getString("SFJY"));
                 list.add(map);
             }
         }finally {

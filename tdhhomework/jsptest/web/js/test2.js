@@ -38,12 +38,65 @@ function display(method){
         $('select').attr('disabled', true);
         $(':button').attr('disabled', false);
         $("#save").unbind('click').bind('click',function (){
-           //相应数据标记为禁用
-           alert('do something');
+           $.ajax({
+               type:'post',
+               url:'DeleteServlet',
+               data:{'userid':$('[name="userid"]').val()},
+               dataType: 'text',
+               success:function (data){
+                    alert(data);
+                    window.close();
+               }
+           });
         });
     }else if(method==='modify'){
         $('[name="userid"]').attr('readonly',true);
         $('[name="userid"]').css('background-color','#f7f7f7');
+
+        $("#save").unbind('click').bind('click',function (){
+            var username=jQuery('[name="username"]').val();
+            var userid=jQuery('[name="userid"]').val();
+            var pwd=jQuery('[name="pwd"]').val();
+            var pwd2=jQuery('[name="pwd2"]').val();
+            var gender=jQuery('[name="gender"]:checked').val();
+            var birth=jQuery('#datetimepicker').val().replace(/-/g,'');
+            var pxh=jQuery('[name="number"]').val();
+            var depart=jQuery("#depart option:selected").val();
+            if(jQuery('[name="isBan"]:checked')){
+                var ban=jQuery('[name="isBan"]:checked').val();
+            }else{
+                var ban='0';
+            }
+            console.log(ban);
+            var msg=[];
+            if(check(username)){
+                msg.push('用户姓名');
+            }
+            if(check(pwd)){
+                msg.push('用户口令');
+            }
+            if(check(depart)){
+                msg.push('部门');
+            }
+            if(msg.length){
+                alert('请检查必填项：'+msg.join('，'));
+            } else if(!(pwd==pwd2)){
+                alert('两次口令不一致');
+            }else{
+                $.ajax({
+                    type:'post',
+                    url:'UpdateServlet',
+                    data:{
+                        'userid':userid,'username':username,'pwd':pwd,'gender':gender,'depart':depart,'birth':birth,'pxh':pxh,'ban':ban
+                    },
+                    dataType: 'text',
+                    success:function (data){
+                        alert(data);
+                        window.close();
+                    }
+                });
+            }
+        });
     }
 }
 
@@ -79,12 +132,15 @@ function fillTable(userId){
                 }
             });
             $('[name="number"]').val(user.PXH);
-            if(user.CSRQ===''){
-                $('#datetimepicker').val('无');
+            if(user.CSRQ===''||user.CSRQ===null){
+                $('#datetimepicker').val('');
             }else{
                 //birth=YYYY-mm-dd,和datapicker统一
                 var birth=user.CSRQ.substring(0,4)+'-'+user.CSRQ.substring(4,6)+'-'+user.CSRQ.substring(6);
                 $('#datetimepicker').val(birth);
+            }
+            if(user.SFJY==='1'){
+                $('[name="isBan"]').prop('checked',true);
             }
         }
     });
