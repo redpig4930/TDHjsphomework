@@ -2,19 +2,7 @@ package Jdbc;
 
 import java.sql.*;
 
-/**
- * @Author: huzhenyu
- * @Description: jdbc工具类
- * @Project Name:test
- * @File Name: JdbcUtils
- * @Package Name:tdh.test.jdbc
- * @Copyright (c) 2021,南京通达海信息科技有限公司 All Rights Reserved.
- * Modification History:
- * @Date @TIME      @Author      @Version  Description
- * ------------------------------------------------------------------
- * 2021/04/11 13:57  wangzy     1.0        1.0 Version
- * 2021/04/16 18:25  huzhenyu   1.01       连接自己的数据库
- */
+
 public final class JdbcUtils {
     /**
      * 数据量url
