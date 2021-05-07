@@ -5,13 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-/**
- * @Author huzhenyu
- * @Description 登陆过滤，过滤未登陆的直接访问
- * @Project Name:jsptest
- * @File_Name: LoginFilter
- * @Package_Name:  filter
- */
+
 public class LoginFilter implements Filter {
 
     /**
