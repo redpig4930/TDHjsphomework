@@ -12,13 +12,7 @@ import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
-/**
- * @Author huzhenyu
- * @Description 新增用户servlet
- * @Project Name:jsptest
- * @File_Name: CreateUser
- * @Package_Name:  servlet
- */
+
 public class CreateUser extends HttpServlet {
     /**
      * 调用doGET，转到doPost
