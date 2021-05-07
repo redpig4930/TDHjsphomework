@@ -25,7 +25,8 @@ textarea{
 }
 
 .test_input{
-	width: 95%;
+	width: 90%;
+	margin-left: 10px;
 }
 
 .test_head{
@@ -78,5 +79,28 @@ label{
 	font-size: 15px;
 	font-weight:bold;
 	color: #466c1b;
+}
+
+.login{
+	width: 400px;
+	height: 100%;
+	table-layout: fixed;
+	border-collapse: collapse;
+	background-color: #a7cbaf;
+	margin-left: 530px;
+	margin-top: 300px;
+	border: 1px solid black;
+}
+
+.login_head{
+	text-align: right;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.login_title{
+	border: 1px solid black;
+	text-align: center;
+	font-size: 24px;
 }
 

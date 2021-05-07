@@ -1,9 +1,11 @@
 jQuery(function (){
+    //日历控件 https://github.com/xdan/datetimepicker
     jQuery.datetimepicker.setLocale('ch');
     jQuery('#datetimepicker').datetimepicker({
         timepicker: false,
         format:'Y-m-d'
     });
+    //读取地址栏，判断是编辑、查看、还是删除
     var afterUrl =window.location.search.substring(1);
     if(!(afterUrl==='')){
         var method = afterUrl.substring(afterUrl.indexOf('method=')+7,afterUrl.indexOf('&'));
@@ -19,13 +21,16 @@ jQuery(function (){
                 for(var i in data){
                     $("#depart").append("<option value="+i+">"+data[i]+"</option>");
                 }
+            },
+            error:function (){
+                alert("发生错误")
             }
         });
     }
 
 
 });
-
+//不同显示方式，对于查看、编辑、删除
 function display(method){
     if(method==='view'){
         $("#save").hide();
@@ -45,14 +50,20 @@ function display(method){
                dataType: 'text',
                success:function (data){
                     alert(data);
+                    if (window.opener && !window.opener.closed) {
+                       window.opener.reloadResult();
+                    }
                     window.close();
+               },
+               error:function (){
+                   alert("发生错误")
                }
            });
         });
     }else if(method==='modify'){
         $('[name="userid"]').attr('readonly',true);
         $('[name="userid"]').css('background-color','#f7f7f7');
-
+        //保存按钮绑定新的方法
         $("#save").unbind('click').bind('click',function (){
             var username=jQuery('[name="username"]').val();
             var userid=jQuery('[name="userid"]').val();
@@ -62,12 +73,8 @@ function display(method){
             var birth=jQuery('#datetimepicker').val().replace(/-/g,'');
             var pxh=jQuery('[name="number"]').val();
             var depart=jQuery("#depart option:selected").val();
-            if(jQuery('[name="isBan"]:checked')){
-                var ban=jQuery('[name="isBan"]:checked').val();
-            }else{
-                var ban='0';
-            }
-            console.log(ban);
+            var ban=jQuery('[name="isBan"]:checked').val();
+
             var msg=[];
             if(check(username)){
                 msg.push('用户姓名');
@@ -92,14 +99,20 @@ function display(method){
                     dataType: 'text',
                     success:function (data){
                         alert(data);
+                        if (window.opener && !window.opener.closed) {
+                            window.opener.reloadResult();
+                        }
                         window.close();
+                    },
+                    error:function (){
+                        alert("发生错误")
                     }
                 });
             }
         });
     }
 }
-
+//填充用户信息表单
 function fillTable(userId){
     $.ajax({
         type:'post',
@@ -129,6 +142,9 @@ function fillTable(userId){
                             $("#depart").append("<option value="+i+">"+data[i]+"</option>");
                         }
                     }
+                },
+                error:function (){
+                    alert("发生错误")
                 }
             });
             $('[name="number"]').val(user.PXH);

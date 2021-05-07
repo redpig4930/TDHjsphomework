@@ -7,7 +7,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+/**
+ * @Author huzhenyu
+ * @Description 增删查改类
+ * @Project Name:jsptest
+ * @File_Name: CRUDtuser
+ * @Package_Name:  Jdbc
+ * @修改记录：
+ *      2021.4.30   新增了encryptAndDencrypt方法，用于对用户口令进行加密。gendermap转换使用KIND字段而不是BT字段
+ */
 public class CrudTuser {
     /**
      * 性别代码-性别名称map
@@ -55,6 +63,8 @@ public class CrudTuser {
         PreparedStatement pst = null;
         ResultSet rs = null;
         //values数组保存要插入的字段，且顺序与表相同
+        //用户口令加密
+        YHKL=encryptAndDencrypt(YHKL,YHID.charAt(0));
         String[] values = {YHDM, DWDM, YHID, YHXM, YHKL, YHXB, YHBM, CSRQ, DJSJ,SFJY,PXH};
         byte yes=new Byte("1");
         byte no=new Byte("0");
@@ -97,7 +107,7 @@ public class CrudTuser {
             return 1;
             //System.out.println("插入记录："+YHDM+","+DWDM+","+YHID+","+YHXM+","+YHKL+","+YHXB+","+YHBM+","+CSRQ+","+DJSJ);
         }catch (MySQLIntegrityConstraintViolationException e){
-            System.out.println("主键重复");
+            //System.out.println("主键重复");
             return 0;
         }
         finally {
@@ -106,10 +116,16 @@ public class CrudTuser {
     }
 
     /**
-     * 更新用户姓名
-     * @param userId 用户id
-     * @param updateValue 更新值
-     * @throws Exception 异常信息
+     * 更新用户
+     * @param YHID 用户id
+     * @param YHXM 用户姓名
+     * @param YHKL 用户口令
+     * @param YHXB 用户性别
+     * @param YHBM 用户部门
+     * @param CSRQ 出生日期
+     * @param PXH 排序号
+     * @param SFJY 禁用
+     * @throws Exception
      */
     public static void update( String YHID, String YHXM, String YHKL, String YHXB, String YHBM, String CSRQ,String PXH,String SFJY)throws Exception{
         Connection conn = null;
@@ -117,6 +133,8 @@ public class CrudTuser {
         ResultSet rs = null;
         byte yes=new Byte("1");
         byte no=new Byte("0");
+        //用户口令加密
+        YHKL=encryptAndDencrypt(YHKL,YHID.charAt(0));
         String[] values={YHXM,YHKL,YHXB,YHBM,CSRQ,PXH,SFJY,YHID};
         try {
             //建立连接
@@ -159,7 +177,7 @@ public class CrudTuser {
 
     /**
      * 查询用户记录
-     * @param userId 用户id
+     * @param userId 用户id或用户姓名
      * @return map 用户信息
      * @throws Exception
      */
@@ -172,9 +190,16 @@ public class CrudTuser {
             //建立连接
             conn = JdbcUtils.getConnection();
             //创建语句
-            pst = conn.prepareStatement("select YHID, YHXM, YHKL, YHXB, YHBM, CSRQ, PXH,SFJY from T_USER where YHID =? or YHXM=?");
-            pst.setString(1,userId);
-            pst.setString(2,userId);
+            pst = conn.prepareStatement("select YHID, YHXM, YHKL, YHXB, YHBM, CSRQ, PXH,SFJY from T_USER where YHID like ? or YHXM like ? order by PXH ASC");
+            String userId2=userId.replaceAll("%","");
+            if(userId2.isEmpty()){
+                pst.setString(1,userId2);
+                pst.setString(2,userId2);
+            }else {
+                pst.setString(1,"%"+userId2+"%");
+                pst.setString(2,"%"+userId2+"%");
+            }
+
             //执行语句
             rs = pst.executeQuery();
             //处理结果
@@ -182,7 +207,9 @@ public class CrudTuser {
                 Map<String,String> map = new HashMap();
                 map.put("YHID",rs.getString("YHID"));
                 map.put("YHXM",rs.getString("YHXM"));
-                map.put("YHKL",rs.getString("YHKL"));
+                //解密
+                String YHKL=encryptAndDencrypt(rs.getString("YHKL"),rs.getString("YHID").charAt(0));
+                map.put("YHKL",YHKL);
                 map.put("YHXB",gendermap(rs.getString("YHXB")));
                 map.put("YHBM", DepartMap.departMap(rs.getString("YHBM")));
                 map.put("CSRQ",rs.getString("CSRQ"));
@@ -211,7 +238,7 @@ public class CrudTuser {
                 // 建立连接
                 conn = JdbcUtils.getConnection();
                 // 创建语句
-                pst = conn.prepareStatement("select CODE,MC from TS_BZDM where BT='性别'");
+                pst = conn.prepareStatement("select CODE,MC from TS_BZDM where KIND='00003'");
                 // 执行语句
                 rs = pst.executeQuery();
                 // 处理结果
@@ -226,6 +253,12 @@ public class CrudTuser {
         return (String)map.get(CODE);
     }
 
+    /**
+     * 读同一部门的用户
+     * @param departId 部门代码
+     * @return 同一部门的用户记录
+     * @throws Exception
+     */
     public static List<Map<String,String>> readByDepart(String departId) throws Exception {
         Connection conn = null;
         PreparedStatement pst = null;
@@ -235,7 +268,7 @@ public class CrudTuser {
             //建立连接
             conn = JdbcUtils.getConnection();
             //创建语句
-            pst = conn.prepareStatement("select YHID, YHXM, YHKL, YHXB, YHBM, CSRQ, PXH from T_USER where YHBM=?");
+            pst = conn.prepareStatement("select YHID, YHXM, YHKL, YHXB, YHBM, CSRQ, PXH from T_USER where YHBM=? order by PXH ASC");
             pst.setString(1,departId);
             //执行语句
             rs = pst.executeQuery();
@@ -244,7 +277,9 @@ public class CrudTuser {
                 Map<String,String> map = new HashMap();
                 map.put("YHID",rs.getString("YHID"));
                 map.put("YHXM",rs.getString("YHXM"));
-                map.put("YHKL",rs.getString("YHKL"));
+                //解密
+                String YHKL=encryptAndDencrypt(rs.getString("YHKL"),rs.getString("YHID").charAt(0));
+                map.put("YHKL",YHKL);
                 map.put("YHXB",gendermap(rs.getString("YHXB")));
                 map.put("YHBM", DepartMap.departMap(rs.getString("YHBM")));
                 map.put("CSRQ",rs.getString("CSRQ"));
@@ -255,5 +290,57 @@ public class CrudTuser {
             JdbcUtils.close(rs,pst,conn);
         }
         return list;
+    }
+
+    /**
+     * 读用户id和口令，用于验证登陆
+     * @param YHID 用户id
+     * @param YHKL 用户口令
+     * @return 用户id和口令
+     * @throws Exception
+     */
+    public static List<Map<String,String>> readIdPwd(String YHID,String YHKL) throws Exception{
+        Connection conn = null;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+        List list = new ArrayList();
+        try{
+            //建立连接
+            conn = JdbcUtils.getConnection();
+            //创建语句
+            pst = conn.prepareStatement("select YHID, YHKL from T_USER where YHID=? and YHKL=? ");
+            pst.setString(1,YHID);
+            YHKL=encryptAndDencrypt(YHKL,YHID.charAt(0));
+            pst.setString(2,YHKL);
+            //执行语句
+            rs = pst.executeQuery();
+            //处理结果
+            while (rs.next()){
+                Map<String,String> map = new HashMap();
+                map.put("YHID",rs.getString("YHID"));
+                map.put("YHKL",rs.getString("YHKL"));
+                list.add(map);
+            }
+        }finally {
+            JdbcUtils.close(rs,pst,conn);
+        }
+        return list;
+    }
+
+    /**
+     * 使用用户id，对密码进行加密和解密
+     * @param value 密码值
+     * @param secret id的第一个字符
+     * @return 输入明文返回密文，输入密文返回明文。比如abc123加密后为PSR
+     */
+    public static String encryptAndDencrypt(String value, char secret)
+    {
+        byte[] bt=value.getBytes(); //将需要加密的内容转换为字节数组
+        for(int i=0;i<bt.length;i++)
+        {
+            bt[i]=(byte)(bt[i]^(int)secret); //通过异或运算进行加密
+        }
+        String newresult=new String(bt,0,bt.length); //将加密后的字符串保存到 newresult 变量中
+        return newresult;
     }
 }

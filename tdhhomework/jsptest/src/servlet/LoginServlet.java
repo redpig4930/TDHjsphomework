@@ -1,23 +1,25 @@
 package servlet;
 
 import Jdbc.CrudTuser;
+import net.sf.json.JSONArray;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.util.List;
 /**
  * @Author huzhenyu
- * @Description 更新用户servlet
+ * @Description 登陆servlet
  * @Project Name:jsptest
- * @File_Name: UpdateServlet
+ * @File_Name: LoginServlet
  * @Package_Name:  servlet
  */
-public class UpdateServlet extends HttpServlet {
+public class LoginServlet extends HttpServlet {
+
     /**
      * 调用doGET，转到doPost
      * @param request 请求
@@ -31,7 +33,7 @@ public class UpdateServlet extends HttpServlet {
     }
 
     /**
-     * 处理更新记录请求
+     * 处理登陆请求
      * @param request 请求
      * @param response 响应
      * @throws ServletException
@@ -40,20 +42,18 @@ public class UpdateServlet extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request,HttpServletResponse response) throws ServletException ,IOException{
         String userId = request.getParameter("userid");
-        String userName = request.getParameter("username");
         String pwd = request.getParameter("pwd");
-        String gender = request.getParameter("gender");
-        String depart = request.getParameter("depart");
-        String birth = request.getParameter("birth");
-        String pxh = request.getParameter("pxh");
-        String ban = request.getParameter("ban");
+        HttpSession session = request.getSession();
+        List userList =null;
         try {
-            CrudTuser.update(userId,userName,pwd,gender,depart,birth,pxh,ban);
+            userList=CrudTuser.readIdPwd(userId,pwd);
         } catch (Exception e) {
             e.printStackTrace();
         }
+        String json= JSONArray.fromObject(userList).toString();
         response.setCharacterEncoding("UTF-8");
         PrintWriter writer = response.getWriter();
-        writer.write("更新成功");
+        writer.write(json);
+        session.setAttribute("user","yes");
     }
 }

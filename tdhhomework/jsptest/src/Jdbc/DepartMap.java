@@ -4,7 +4,13 @@ import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
 
-
+/**
+ * @Author huzhenyu
+ * @Description 部门代码转换类
+ * @Project Name:jsptest
+ * @File_Name: Departmap
+ * @Package_Name:  Jdbc
+ */
 public class DepartMap {
     /**
      *部门代码-部门名称map
