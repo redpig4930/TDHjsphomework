@@ -7,15 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-/**
- * @Author huzhenyu
- * @Description 增删查改类
- * @Project Name:jsptest
- * @File_Name: CRUDtuser
- * @Package_Name:  Jdbc
- * @修改记录：
- *      2021.4.30   新增了encryptAndDencrypt方法，用于对用户口令进行加密。gendermap转换使用KIND字段而不是BT字段
- */
+
 public class CrudTuser {
     /**
      * 性别代码-性别名称map
