@@ -10,13 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
-/**
- * @Author huzhenyu
- * @Description 删除用户servlet
- * @Project Name:jsptest
- * @File_Name: DeleteServlet
- * @Package_Name:  servlet
- */
+
 public class DeleteServlet extends HttpServlet {
     /**
      * 调用doGET，转到doPost
