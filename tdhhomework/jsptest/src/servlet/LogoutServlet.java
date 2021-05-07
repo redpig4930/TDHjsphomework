@@ -8,13 +8,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-/**
- * @Author huzhenyu
- * @Description 注销servlet
- * @Project Name:jsptest
- * @File_Name: LogoutServlet
- * @Package_Name:  servlet
- */
+
 public class LogoutServlet extends HttpServlet {
     /**
      * 调用doGET，转到doPost
