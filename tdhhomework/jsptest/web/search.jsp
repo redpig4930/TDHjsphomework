@@ -1,12 +1,3 @@
-<%--
- * @Author huzhenyu
- * @Description 用户搜索页面
- * @Project Name:jsptest
- * @修改记录：
- *      2021.4.30   实现了注销功能。
- *                  修改、新增或删除记录后，原页面会按之前的搜索条件刷新页面(test1.js的reloadResult方法)。
- *                  显示序号从1开始显示，记录还是按排序号排序。
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="utf-8" %>
 <!DOCTYPE html>
 <html>
