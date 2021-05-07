@@ -1,8 +1,3 @@
-<%--
- * @Author huzhenyu
- * @Description 用户信息编辑页面
- * @Project Name:jsptest
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
