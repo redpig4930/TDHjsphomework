@@ -10,13 +10,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-/**
- * @Author huzhenyu
- * @Description 更新用户servlet
- * @Project Name:jsptest
- * @File_Name: UpdateServlet
- * @Package_Name:  servlet
- */
+
 public class UpdateServlet extends HttpServlet {
     /**
      * 调用doGET，转到doPost
