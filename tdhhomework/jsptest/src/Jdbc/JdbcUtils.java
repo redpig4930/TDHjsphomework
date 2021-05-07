@@ -2,13 +2,7 @@ package Jdbc;
 
 import java.sql.*;
 
-/**
- * @Author: huzhenyu
- * @Description: jdbc工具类
- * @Project Name:jsptest
- * @File Name: JdbcUtils
- * @Package Name:Jdbc
- */
+
 public final class JdbcUtils {
     /**
      * 数据量url
