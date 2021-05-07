@@ -9,13 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-/**
- * @Author huzhenyu
- * @Description 获取部门servlet
- * @Project Name:jsptest
- * @File_Name: DepartTreeServlet
- * @Package_Name:  servlet
- */
+
 public class DepartTreeServlet extends HttpServlet {
     /**
      * 调用doGET，转到doPost
