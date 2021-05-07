@@ -11,13 +11,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
-/**
- * @Author huzhenyu
- * @Description 登陆servlet
- * @Project Name:jsptest
- * @File_Name: LoginServlet
- * @Package_Name:  servlet
- */
+
 public class LoginServlet extends HttpServlet {
 
     /**
