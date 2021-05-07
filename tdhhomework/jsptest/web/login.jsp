@@ -1,10 +1,3 @@
-<%--
- * @Author huzhenyu
- * @Description 用户登陆页面
- * @Project Name:jsptest
- * @修改记录：
- *      2021.4.30   新增了保存用户名和密码（相关见test3.js）
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="utf-8"%>
 <!DOCTYPE html>
 <html>
